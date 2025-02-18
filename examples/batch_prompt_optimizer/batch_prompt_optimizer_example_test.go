@@ -10,8 +10,8 @@ import (
 	"golang.org/x/time/rate"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/teilomillet/gollm"
-	"github.com/teilomillet/gollm/optimizer"
+	gollm "github.com/yockii/gollm_cn"
+	"github.com/yockii/gollm_cn/optimizer"
 )
 
 func TestBatchPromptOptimizer(t *testing.T) {

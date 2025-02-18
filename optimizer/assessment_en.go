@@ -33,23 +33,23 @@ import (
 //   - Weaknesses with improvement suggestions
 //   - Overall effectiveness and efficiency
 //   - Alignment with optimization goals
-func (po *PromptOptimizer) assessPrompt(ctx context.Context, prompt *llm.Prompt) (OptimizationEntry, error) {
+func (po *PromptOptimizer) assessPrompt_en(ctx context.Context, prompt *llm.Prompt) (OptimizationEntry, error) {
 	recentHistory := po.recentHistory()
 	assessPrompt := llm.NewPrompt(fmt.Sprintf(`
-		评估以下针对任务的提示词: %s
+		Assess the following prompt for the task: %s
 
-		完整提示词结构:
+		Full Prompt Structure:
 		%+v
 
-		最近历史记录:
+		Recent History:
 		%+v
 
-		自定义指标: %v
+		Custom Metrics: %v
 
-		优化目标: %s
+		Optimization Goal: %s
 
-		请在评估时考虑最近的历史记录。
-		以 JSON 对象的形式提供你的评估，结构如下:
+		Consider the recent history when making your assessment.
+		Provide your assessment as a JSON object with the following structure:
 		{
 			"metrics": [{"name": string, "value": number, "reasoning": string}, ...],
 			"strengths": [{"point": string, "example": string}, ...],
@@ -61,19 +61,19 @@ func (po *PromptOptimizer) assessPrompt(ctx context.Context, prompt *llm.Prompt)
 			"alignmentWithGoal": number
 		}
 
-		重要提示: 
-		- 请勿在你的回复中使用任何 Markdown 格式、代码块或反引号。
-		- 仅返回原始 JSON 对象。
-		- 对于数值评分，请使用 0 到 20（含）的等级。
-		- 对于 overallGrade:
-		  - 如果使用字母等级，请使用以下等级之一: F, D, C, B, A, A+
-		  - 如果使用数字等级，请使用与 overallScore 相同的值 (0-20)
-		- 每个数组（metrics、strengths、weaknesses、suggestions）中至少包含一个项目。
-		- 为每个要点提供具体的例子和理由。
-		- 评价提示词的效率以及与优化目标的一致性。
-		- 根据建议的预期影响对建议进行排序（20 为最高影响）。
-		- 在你的评估中使用清晰、无术语的语言。
-		- 在提交之前，请仔细检查您的回复是否为有效的 JSON。
+		IMPORTANT: 
+		- Do not use any markdown formatting, code blocks, or backticks in your response.
+		- Return only the raw JSON object.
+		- For numerical ratings, use a scale of 0 to 20 (inclusive).
+		- For the overallGrade:
+		  - If using letter grades, use one of: F, D, C, B, A, A+
+		  - If using numerical grades, use the same value as overallScore (0-20)
+		- Include at least one item in each array (metrics, strengths, weaknesses, suggestions).
+		- Provide specific examples and reasoning for each point.
+		- Rate the prompt's efficiency and alignment with the optimization goal.
+		- Rank suggestions by their expected impact (20 being highest impact).
+		- Use clear, jargon-free language in your assessment.
+		- Double-check that your response is valid JSON before submitting.
 	`, po.taskDesc, prompt, recentHistory, po.customMetrics, po.optimizationGoal))
 
 	// Generate assessment using LLM
@@ -128,7 +128,7 @@ func (po *PromptOptimizer) assessPrompt(ctx context.Context, prompt *llm.Prompt)
 // Example threshold values:
 //   - Numerical: 0.75 requires score >= 15/20
 //   - Letter: Requires A- or better
-func (po *PromptOptimizer) isOptimizationGoalMet(assessment PromptAssessment) (bool, error) {
+func (po *PromptOptimizer) isOptimizationGoalMet_en(assessment PromptAssessment) (bool, error) {
 	if po.ratingSystem == "" {
 		return false, nil
 	}

@@ -10,8 +10,8 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/teilomillet/gollm/config"
-	"github.com/teilomillet/gollm/utils"
+	"github.com/yockii/gollm_cn/config"
+	"github.com/yockii/gollm_cn/utils"
 )
 
 // OllamaProvider implements the Provider interface for Ollama's API.
@@ -40,7 +40,7 @@ type OllamaProvider struct {
 //
 // Returns:
 //   - A configured Ollama Provider instance
-func NewOllamaProvider(endpoint, model string, extraHeaders map[string]string) Provider {
+func NewOllamaProvider(endpoint, apiKey, model string, extraHeaders map[string]string) Provider {
 	if extraHeaders == nil {
 		extraHeaders = make(map[string]string)
 	}
@@ -92,8 +92,8 @@ func (p *OllamaProvider) SetDefaultOptions(config *config.Config) {
 	if config.Seed != nil {
 		p.SetOption("seed", *config.Seed)
 	}
-	if config.OllamaEndpoint != "" {
-		p.SetEndpoint(config.OllamaEndpoint)
+	if config.Endpoint != "" {
+		p.SetEndpoint(config.Endpoint)
 	}
 	p.SetOption("top_p", config.TopP)
 	p.SetOption("min_p", config.MinP)

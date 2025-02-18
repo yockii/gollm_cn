@@ -6,9 +6,9 @@ package gollm
 import (
 	"strings"
 
-	"github.com/teilomillet/gollm/config"
-	"github.com/teilomillet/gollm/llm"
-	"github.com/teilomillet/gollm/utils"
+	"github.com/yockii/gollm_cn/config"
+	"github.com/yockii/gollm_cn/llm"
+	"github.com/yockii/gollm_cn/utils"
 )
 
 // The following types are re-exported from the llm package to provide a cleaner API surface.

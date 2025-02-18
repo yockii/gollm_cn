@@ -65,9 +65,9 @@ func DefaultOptimizationConfig() OptimizationConfig {
 		MaxRetries:   3,
 		RetryDelay:   time.Second * 2,
 		Metrics: []Metric{
-			{Name: "Relevance", Description: "How relevant the prompt is to the task"},
-			{Name: "Clarity", Description: "How clear and unambiguous the prompt is"},
-			{Name: "Specificity", Description: "How specific and detailed the prompt is"},
+			{Name: "Relevance", Description: "提示与任务的相关程度"},
+			{Name: "Clarity", Description: "提示的清晰度和明确性"},
+			{Name: "Specificity", Description: "提示的详细程度和精确性"},
 		},
 	}
 }

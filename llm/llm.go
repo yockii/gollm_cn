@@ -12,9 +12,9 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/teilomillet/gollm/config"
-	"github.com/teilomillet/gollm/providers"
-	"github.com/teilomillet/gollm/utils"
+	"github.com/yockii/gollm_cn/config"
+	"github.com/yockii/gollm_cn/providers"
+	"github.com/yockii/gollm_cn/utils"
 )
 
 // LLM interface defines the methods that our internal language model should implement.
@@ -98,7 +98,7 @@ func NewLLM(cfg *config.Config, logger utils.Logger, registry *providers.Provide
 		return nil, NewLLMError(ErrorTypeAuthentication, "empty API key", nil)
 	}
 
-	provider, err := registry.Get(cfg.Provider, apiKey, cfg.Model, extraHeaders)
+	provider, err := registry.Get(cfg.Provider, cfg.Endpoint, apiKey, cfg.Model, extraHeaders)
 
 	if err != nil {
 		return nil, err

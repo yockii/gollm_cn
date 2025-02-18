@@ -10,8 +10,8 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/teilomillet/gollm"
-	"github.com/teilomillet/gollm/presets"
+	gollm "github.com/yockii/gollm_cn"
+	"github.com/yockii/gollm_cn/presets"
 )
 
 // validateComplexPerson validates the ComplexPerson struct according to the defined rules

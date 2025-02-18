@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/caarlos0/env/v11"
-	"github.com/teilomillet/gollm/utils"
+	"github.com/yockii/gollm_cn/utils"
 )
 
 // MemoryOption configures conversation memory settings, controlling how much
@@ -53,7 +53,7 @@ type MemoryOption struct {
 type Config struct {
 	Provider              string            `env:"LLM_PROVIDER" envDefault:"anthropic" validate:"required"`
 	Model                 string            `env:"LLM_MODEL" envDefault:"claude-3-5-haiku-latest" validate:"required"`
-	OllamaEndpoint        string            `env:"OLLAMA_ENDPOINT" envDefault:"http://localhost:11434"`
+	Endpoint              string            `env:"LLM_ENDPOINT" envDefault:"http://localhost:11434"`
 	Temperature           float64           `env:"LLM_TEMPERATURE" envDefault:"0.7" validate:"gte=0,lte=1"`
 	MaxTokens             int               `env:"LLM_MAX_TOKENS" envDefault:"100"`
 	TopP                  float64           `env:"LLM_TOP_P" envDefault:"0.9" validate:"gte=0,lte=1"`
@@ -178,10 +178,10 @@ func SetModel(model string) ConfigOption {
 	}
 }
 
-// SetOllamaEndpoint sets the Ollama API endpoint.
-func SetOllamaEndpoint(endpoint string) ConfigOption {
+// SetEndpoint sets the Ollama API endpoint.
+func SetEndpoint(endpoint string) ConfigOption {
 	return func(c *Config) {
-		c.OllamaEndpoint = endpoint
+		c.Endpoint = endpoint
 	}
 }
 

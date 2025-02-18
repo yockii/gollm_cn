@@ -1,4 +1,4 @@
-module github.com/teilomillet/gollm
+module github.com/yockii/gollm_cn
 
 go 1.22.5
 

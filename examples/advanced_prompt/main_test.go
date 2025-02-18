@@ -9,9 +9,9 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/teilomillet/gollm"
-	"github.com/teilomillet/gollm/assess"
-	"github.com/teilomillet/gollm/presets"
+	gollm "github.com/yockii/gollm_cn"
+	"github.com/yockii/gollm_cn/assess"
+	"github.com/yockii/gollm_cn/presets"
 )
 
 func TestAdvancedPromptExample(t *testing.T) {

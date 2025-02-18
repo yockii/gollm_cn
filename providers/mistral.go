@@ -4,16 +4,18 @@ package providers
 import (
 	"encoding/json"
 	"fmt"
+	"net/url"
 	"strings"
 
-	"github.com/teilomillet/gollm/config"
-	"github.com/teilomillet/gollm/utils"
+	"github.com/yockii/gollm_cn/config"
+	"github.com/yockii/gollm_cn/utils"
 )
 
 // MistralProvider implements the Provider interface for Mistral AI's API.
 // It supports Mistral's language models and provides access to their capabilities,
 // including chat completion and structured output.
 type MistralProvider struct {
+	endpoint     string
 	apiKey       string                 // API key for authentication
 	model        string                 // Model identifier (e.g., "mistral-large", "mistral-medium")
 	extraHeaders map[string]string      // Additional HTTP headers
@@ -31,11 +33,15 @@ type MistralProvider struct {
 //
 // Returns:
 //   - A configured Mistral Provider instance
-func NewMistralProvider(apiKey, model string, extraHeaders map[string]string) Provider {
+func NewMistralProvider(endpoint, apiKey, model string, extraHeaders map[string]string) Provider {
 	if extraHeaders == nil {
 		extraHeaders = make(map[string]string)
 	}
+	if endpoint == "" {
+		endpoint = "https://api.mistral.ai/v1"
+	}
 	return &MistralProvider{
+		endpoint:     endpoint,
 		apiKey:       apiKey,
 		model:        model,
 		extraHeaders: extraHeaders,
@@ -48,6 +54,10 @@ func NewMistralProvider(apiKey, model string, extraHeaders map[string]string) Pr
 // This is used for debugging and monitoring API interactions.
 func (p *MistralProvider) SetLogger(logger utils.Logger) {
 	p.logger = logger
+}
+
+func (p *MistralProvider) SetEndpoint(endpoint string) {
+	p.endpoint = endpoint
 }
 
 // SetOption sets a specific option for the Mistral provider.
@@ -78,6 +88,12 @@ func (p *MistralProvider) Name() string {
 // Endpoint returns the Mistral API endpoint URL.
 // This is "https://api.mistral.ai/v1/chat/completions".
 func (p *MistralProvider) Endpoint() string {
+	u, err := url.JoinPath(p.endpoint, "/chat/completions")
+	if err != nil {
+		p.logger.Error("Error joining URL", "error", err)
+	} else {
+		return u
+	}
 	return "https://api.mistral.ai/v1/chat/completions"
 }
 

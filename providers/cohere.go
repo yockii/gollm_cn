@@ -3,16 +3,18 @@ package providers
 import (
 	"encoding/json"
 	"fmt"
+	"net/url"
 	"strings"
 
-	"github.com/teilomillet/gollm/config"
-	"github.com/teilomillet/gollm/utils"
+	"github.com/yockii/gollm_cn/config"
+	"github.com/yockii/gollm_cn/utils"
 )
 
 // CohereProvider implements the Provider interface for Cohere's API.
 // It supports Cohere's language models and provides access to their capabilities,
 // including chat completion and structured output
 type CohereProvider struct {
+	endpoint     string
 	apiKey       string            // API key for authentication
 	model        string            // Model identifier (e.g., "command-r-plus-08-2024", "command-r-plus-04-2024")
 	extraHeaders map[string]string // Additional HTTP headers
@@ -30,12 +32,15 @@ type CohereProvider struct {
 //
 // Returns:
 //   - A configured Cohere Provider instance
-func NewCohereProvider(apiKey, model string, extraHeaders map[string]string) Provider {
+func NewCohereProvider(endpoint, apiKey, model string, extraHeaders map[string]string) Provider {
 	if extraHeaders == nil {
 		extraHeaders = make(map[string]string)
 	}
-
+	if endpoint == "" {
+		endpoint = "https://api.cohere.com/v2"
+	}
 	return &CohereProvider{
+		endpoint:     endpoint,
 		apiKey:       apiKey,
 		model:        model,
 		extraHeaders: extraHeaders,
@@ -48,6 +53,10 @@ func NewCohereProvider(apiKey, model string, extraHeaders map[string]string) Pro
 // This is used for debugging and monitoring API interactions.
 func (p *CohereProvider) SetLogger(logger utils.Logger) {
 	p.logger = logger
+}
+
+func (p *CohereProvider) SetEndpoint(endpoint string) {
+	p.endpoint = endpoint
 }
 
 // SetOption sets a specific option for the Cohere provider.
@@ -83,6 +92,12 @@ func (p *CohereProvider) Name() string {
 // Endpoint returns the base URL for the Cohere API.
 // This is "https://api.cohere.com/v2/chat".
 func (p *CohereProvider) Endpoint() string {
+	u, err := url.JoinPath(p.endpoint, "/chat")
+	if err != nil {
+		p.logger.Error("Error joining URL", "error", err)
+	} else {
+		return u
+	}
 	return "https://api.cohere.com/v2/chat"
 }
 

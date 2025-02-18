@@ -6,16 +6,18 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"net/url"
 	"strings"
 
-	"github.com/teilomillet/gollm/config"
-	"github.com/teilomillet/gollm/utils"
+	"github.com/yockii/gollm_cn/config"
+	"github.com/yockii/gollm_cn/utils"
 )
 
 // OpenAIProvider implements the Provider interface for OpenAI's API.
 // It supports GPT models and provides access to OpenAI's language model capabilities,
 // including function calling, JSON mode, and structured output validation.
 type OpenAIProvider struct {
+	endpoint     string                 // baseUrl for request
 	apiKey       string                 // API key for authentication
 	model        string                 // Model identifier (e.g., "gpt-4", "gpt-4o-mini")
 	extraHeaders map[string]string      // Additional HTTP headers
@@ -33,11 +35,15 @@ type OpenAIProvider struct {
 //
 // Returns:
 //   - A configured OpenAI Provider instance
-func NewOpenAIProvider(apiKey, model string, extraHeaders map[string]string) Provider {
+func NewOpenAIProvider(endpoint, apiKey, model string, extraHeaders map[string]string) Provider {
 	if extraHeaders == nil {
 		extraHeaders = make(map[string]string)
 	}
+	if endpoint == "" {
+		endpoint = "https://api.openai.com/v1"
+	}
 	return &OpenAIProvider{
+		endpoint:     endpoint,
 		apiKey:       apiKey,
 		model:        model,
 		extraHeaders: extraHeaders,
@@ -50,6 +56,10 @@ func NewOpenAIProvider(apiKey, model string, extraHeaders map[string]string) Pro
 // This is used for debugging and monitoring API interactions.
 func (p *OpenAIProvider) SetLogger(logger utils.Logger) {
 	p.logger = logger
+}
+
+func (p *OpenAIProvider) SetEndpoint(endpoint string) {
+	p.endpoint = endpoint
 }
 
 // SetOption sets a specific option for the OpenAI provider.
@@ -84,6 +94,12 @@ func (p *OpenAIProvider) Name() string {
 // Endpoint returns the OpenAI API endpoint URL.
 // For API version 1, this is "https://api.openai.com/v1/chat/completions".
 func (p *OpenAIProvider) Endpoint() string {
+	u, err := url.JoinPath(p.endpoint, "/chat/completions")
+	if err != nil {
+		p.logger.Error("Error joining URL", "error", err)
+	} else {
+		return u
+	}
 	return "https://api.openai.com/v1/chat/completions"
 }
 

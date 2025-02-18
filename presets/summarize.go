@@ -6,7 +6,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/teilomillet/gollm"
+	"github.com/yockii/gollm_cn"
 )
 
 // summarizeTemplate defines a structured prompt template for text summarization.
@@ -19,14 +19,14 @@ import (
 // - Structured output format
 var summarizeTemplate = gollm.NewPromptTemplate(
 	"Summarize",
-	"Summarize the given text",
-	"Summarize the following text:\n\n{{.Text}}",
+	"总结给定的文本",
+	"请总结以下文本:\n\n{{.Text}}",
 	gollm.WithPromptOptions(
 		gollm.WithDirectives(
-			"Provide a concise summary",
-			"Capture the main points and key details",
+			"提供简洁的总结",
+			"抓住要点和关键细节",
 		),
-		gollm.WithOutput("Summary:"),
+		gollm.WithOutput("总结:"),
 	),
 )
 

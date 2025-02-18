@@ -8,8 +8,8 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/teilomillet/gollm/config"
-	"github.com/teilomillet/gollm/utils"
+	"github.com/yockii/gollm_cn/config"
+	"github.com/yockii/gollm_cn/utils"
 )
 
 // Provider defines the interface that all LLM providers must implement.
@@ -68,11 +68,14 @@ type Provider interface {
 	// ParseStreamResponse processes a single chunk from a streaming response.
 	// It returns the token text and any error encountered.
 	ParseStreamResponse(chunk []byte) (string, error)
+
+	// SetEndpoint sets the API endpoint URL for the provider
+	SetEndpoint(endpoint string)
 }
 
 // ProviderConstructor defines a function type for creating new provider instances.
 // Each provider implementation must provide a constructor function of this type.
-type ProviderConstructor func(apiKey, model string, extraHeaders map[string]string) Provider
+type ProviderConstructor func(endpoint, apiKey, model string, extraHeaders map[string]string) Provider
 
 // ProviderRegistry manages the registration and retrieval of LLM providers.
 // It provides thread-safe access to provider constructors and supports
@@ -163,7 +166,7 @@ func (pr *ProviderRegistry) Register(name string, constructor ProviderConstructo
 // Example:
 //
 //	provider, err := registry.Get("openai", "sk-...", "gpt-4", nil)
-func (pr *ProviderRegistry) Get(name, apiKey, model string, extraHeaders map[string]string) (Provider, error) {
+func (pr *ProviderRegistry) Get(name, endpoint, apiKey, model string, extraHeaders map[string]string) (Provider, error) {
 	pr.mutex.RLock()
 	constructor, exists := pr.providers[name]
 	pr.mutex.RUnlock()
@@ -172,5 +175,5 @@ func (pr *ProviderRegistry) Get(name, apiKey, model string, extraHeaders map[str
 		return nil, fmt.Errorf("unknown provider: %s", name)
 	}
 
-	return constructor(apiKey, model, extraHeaders), nil
+	return constructor(endpoint, apiKey, model, extraHeaders), nil
 }

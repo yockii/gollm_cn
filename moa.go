@@ -7,10 +7,10 @@ import (
 	"sync"
 	"time"
 
-	"github.com/teilomillet/gollm/config"
-	"github.com/teilomillet/gollm/llm"
-	"github.com/teilomillet/gollm/providers"
-	"github.com/teilomillet/gollm/utils"
+	"github.com/yockii/gollm_cn/config"
+	"github.com/yockii/gollm_cn/llm"
+	"github.com/yockii/gollm_cn/providers"
+	"github.com/yockii/gollm_cn/utils"
 )
 
 // MOAConfig represents the configuration for the Mixture of Agents (MOA) system.

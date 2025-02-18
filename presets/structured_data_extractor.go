@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/teilomillet/gollm"
+	gollm "github.com/yockii/gollm_cn"
 )
 
 // ExtractStructuredData extracts structured data from unstructured text by mapping it
@@ -121,14 +121,14 @@ func ExtractStructuredData[T any](ctx context.Context, l gollm.LLM, text string,
 	}
 
 	// First, check if the text contains extractable information
-	validationPrompt := gollm.NewPrompt(fmt.Sprintf("Analyze if the following text contains enough information to extract structured data:\n\n%s\n\nRespond with 'yes' if the text contains extractable information, 'no' if it doesn't.", text))
+	validationPrompt := gollm.NewPrompt(fmt.Sprintf("分析以下文本是否包含足够的信息来提取结构化数据:\n\n%s\n\n如果文本包含可提取的信息，请回答'是'，如果不是，请回答'否'", text))
 	validationPrompt.Apply(
 		gollm.WithDirectives(
-			"Only respond with 'yes' or 'no'",
-			"Respond 'yes' if the text contains enough information to fill most required fields",
-			"Respond 'no' if the text is irrelevant or lacks essential information",
+			"仅回答'是'或'否'",
+			"如果文本包含足够的信息来填充大多数必填字段，请回答'是'",
+			"如果文本不相关或缺少必要信息，请回答'否'",
 		),
-		gollm.WithOutput("Single word response: 'yes' or 'no'"),
+		gollm.WithOutput("单字回答：'是'或'否'"),
 	)
 	validationResponse, err := l.Generate(ctx, validationPrompt)
 	if err != nil {
@@ -139,15 +139,15 @@ func ExtractStructuredData[T any](ctx context.Context, l gollm.LLM, text string,
 	}
 
 	// Proceed with extraction
-	promptText := fmt.Sprintf("Extract the following information from the given text:\n\n%s\n\nRespond with a JSON object matching this schema:\n%s", text, string(schema))
+	promptText := fmt.Sprintf("从给定的文本中提取以下信息:\n\n%s\n\nn请使用与此模式匹配的 JSON 对象进行响应:\n%s", text, string(schema))
 	prompt := gollm.NewPrompt(promptText)
 	prompt.Apply(append(opts,
 		gollm.WithDirectives(
-			"Extract all relevant information from the text",
-			"Ensure the output matches the provided JSON schema exactly",
-			"If a field cannot be confidently filled, leave it as null or an empty string/array as appropriate",
+			"从文本中提取所有相关信息",
+			"确保输出与提供的 JSON 模式完全匹配",
+			"如果无法自信地填充某个字段，请将其保留为 null 或适当的空字符串/数组",
 		),
-		gollm.WithOutput("JSON object matching the provided schema"),
+		gollm.WithOutput("与提供的模式匹配的 JSON 对象"),
 	)...)
 	response, err := l.Generate(ctx, prompt)
 	if err != nil {

@@ -56,40 +56,40 @@ import (
 //	        "bold": 18.0
 //	    }
 //	}
-func (po *PromptOptimizer) generateImprovedPrompt(ctx context.Context, prevEntry OptimizationEntry) (*llm.Prompt, error) {
+func (po *PromptOptimizer) generateImprovedPrompt_en(ctx context.Context, prevEntry OptimizationEntry) (*llm.Prompt, error) {
 	recentHistory := po.recentHistory()
 	improvePrompt := llm.NewPrompt(fmt.Sprintf(`
-		基于以下评估和最近的历史记录，生成整个提示词结构的改进版本：
+		Based on the following assessment and recent history, generate an improved version of the entire prompt structure:
 
-		先前的提示词: %+v
-		评估: %+v
+		Previous prompt: %+v
+		Assessment: %+v
 
-		最近的历史记录:
+		Recent History:
 		%+v
 
-		任务描述: %s
-		优化目标: %s
+		Task Description: %s
+		Optimization Goal: %s
 
-		在生成改进时，请考虑最近的历史记录。
+		Consider the recent history when generating improvements.
 
-		提供两个改进的提示词版本：
-		1. 渐进式改进
-		2. 大胆的重新设计
+		Provide two versions of the improved prompt:
+		1. An incremental improvement
+		2. A bold reimagining
 
-		重要提示：仅以原始 JSON 对象回复。请勿使用任何 Markdown 格式、代码块或反引号。
-		JSON 对象应具有以下结构：
+		IMPORTANT: Respond ONLY with a raw JSON object. Do not use any markdown formatting, code blocks, or backticks.
+		The JSON object should have this structure:
 		{
 			"incrementalImprovement": {
-				"input": "改进的提示词文本",
-				"directives": ["指令1", "指令2", ...],
-				"examples": ["示例1", "示例2", ...],
-				"reasoning": "变更的解释及其与评估的联系"
+				"input": "improved prompt text",
+				"directives": ["directive1", "directive2", ...],
+				"examples": ["example1", "example2", ...],
+				"reasoning": "explanation of changes and their link to the assessment"
 			},
 			"boldRedesign": {
-				"input": "重新设计的提示词文本",
-				"directives": ["指令1", "指令2", ...],
-				"examples": ["示例1", "示例2", ...],
-				"reasoning": "对新方法的解释及其潜在优势"
+				"input": "reimagined prompt text",
+				"directives": ["directive1", "directive2", ...],
+				"examples": ["example1", "example2", ...],
+				"reasoning": "explanation of the new approach and its potential benefits"
 			},
 			"expectedImpact": {
 				"incremental": number,
@@ -97,16 +97,16 @@ func (po *PromptOptimizer) generateImprovedPrompt(ctx context.Context, prevEntry
 			}
 		}
 
-		对于每个改进：
-		- 直接解决评估中发现的弱点。
-		- 以已识别的优势为基础。
-		- 确保与任务描述和优化目标保持一致。
-		- 力求语言使用的效率。
-		- 使用清晰、无术语的语言。
-		- 为主要变更提供简要的理由。
-		- 以 0 到 20 的等级对每个版本的预期影响进行评级。
+		For each improvement:
+		- Directly address weaknesses identified in the assessment.
+		- Build upon identified strengths.
+		- Ensure alignment with the task description and optimization goal.
+		- Strive for efficiency in language use.
+		- Use clear, jargon-free language.
+		- Provide a brief reasoning for major changes.
+		- Rate the expected impact of each version on a scale of 0 to 20.
 
-		在提交之前，请仔细检查您的回复是否为有效的 JSON。
+		Double-check that your response is valid JSON before submitting.
 	`, prevEntry.Prompt, prevEntry.Assessment, recentHistory, po.taskDesc, po.optimizationGoal))
 
 	// Log the improvement request for debugging

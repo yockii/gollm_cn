@@ -10,8 +10,8 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/teilomillet/gollm"
-	"github.com/teilomillet/gollm/assess"
+	gollm "github.com/yockii/gollm_cn"
+	"github.com/yockii/gollm_cn/assess"
 )
 
 func TestStreaming(t *testing.T) {

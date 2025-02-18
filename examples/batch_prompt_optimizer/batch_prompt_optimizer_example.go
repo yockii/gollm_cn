@@ -3,14 +3,15 @@ package main
 import (
 	"context"
 	"fmt"
-	"golang.org/x/time/rate"
 	"log"
 	"os"
 	"strings"
 	"time"
 
-	"github.com/teilomillet/gollm"
-	"github.com/teilomillet/gollm/optimizer"
+	"golang.org/x/time/rate"
+
+	gollm "github.com/yockii/gollm_cn"
+	"github.com/yockii/gollm_cn/optimizer"
 )
 
 func main() {

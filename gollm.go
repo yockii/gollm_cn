@@ -7,10 +7,10 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/teilomillet/gollm/config"
-	"github.com/teilomillet/gollm/llm"
-	"github.com/teilomillet/gollm/providers"
-	"github.com/teilomillet/gollm/utils"
+	"github.com/yockii/gollm_cn/config"
+	"github.com/yockii/gollm_cn/llm"
+	"github.com/yockii/gollm_cn/providers"
+	"github.com/yockii/gollm_cn/utils"
 )
 
 // LLM is the interface that wraps the basic LLM operations.
@@ -31,9 +31,6 @@ type LLM interface {
 	Debug(msg string, keysAndValues ...interface{})
 	// GetLogLevel returns the current logging verbosity level.
 	GetLogLevel() LogLevel
-	// SetOllamaEndpoint configures a custom endpoint for Ollama provider.
-	// Returns an error if the current provider doesn't support endpoint configuration.
-	SetOllamaEndpoint(endpoint string) error
 	// SetSystemPrompt updates the system prompt with caching configuration.
 	// The cacheType parameter determines how the prompt should be cached.
 	SetSystemPrompt(prompt string, cacheType CacheType)
@@ -83,12 +80,8 @@ func (l *llmImpl) SetOption(key string, value interface{}) {
 	l.logger.Debug("Option set successfully")
 }
 
-func (l *llmImpl) SetOllamaEndpoint(endpoint string) error {
-	if p, ok := l.provider.(interface{ SetEndpoint(string) }); ok {
-		p.SetEndpoint(endpoint)
-		return nil
-	}
-	return fmt.Errorf("current provider does not support setting custom endpoint")
+func (l *llmImpl) SetEndpoint(endpoint string) {
+	l.provider.SetEndpoint(endpoint)
 }
 
 // GetPromptJSONSchema generates and returns the JSON schema for the Prompt.
@@ -175,7 +168,7 @@ func NewLLM(opts ...ConfigOption) (LLM, error) {
 		return nil, fmt.Errorf("failed to create internal LLM: %w", err)
 	}
 
-	provider, err := providers.NewProviderRegistry().Get(cfg.Provider, cfg.APIKeys[cfg.Provider], cfg.Model, cfg.ExtraHeaders)
+	provider, err := providers.NewProviderRegistry().Get(cfg.Provider, cfg.Endpoint, cfg.APIKeys[cfg.Provider], cfg.Model, cfg.ExtraHeaders)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get provider: %w", err)
 	}

@@ -10,7 +10,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/teilomillet/gollm"
+	gollm "github.com/yockii/gollm_cn"
 )
 
 func main() {

@@ -6,8 +6,8 @@ package optimizer
 import (
 	"time"
 
-	"github.com/teilomillet/gollm/llm"
-	"github.com/teilomillet/gollm/utils"
+	"github.com/yockii/gollm_cn/llm"
+	"github.com/yockii/gollm_cn/utils"
 )
 
 // Metric represents a quantitative or qualitative measure of prompt performance.

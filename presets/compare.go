@@ -8,10 +8,10 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/teilomillet/gollm/config"
-	"github.com/teilomillet/gollm/llm"
-	"github.com/teilomillet/gollm/providers"
-	"github.com/teilomillet/gollm/utils"
+	"github.com/yockii/gollm_cn/config"
+	"github.com/yockii/gollm_cn/llm"
+	"github.com/yockii/gollm_cn/providers"
+	"github.com/yockii/gollm_cn/utils"
 )
 
 // ComparisonResult represents the outcome of a model comparison for a specific provider.

@@ -7,9 +7,9 @@ import (
 	"time"
 
 	"github.com/go-playground/validator/v10"
+	"github.com/yockii/gollm_cn/utils"
 
-	"github.com/teilomillet/gollm/llm"
-	"github.com/teilomillet/gollm/utils"
+	"github.com/yockii/gollm_cn/llm"
 )
 
 // init registers custom validation functions for the optimizer package.

@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/teilomillet/gollm/assess"
+	"github.com/yockii/gollm_cn/assess"
 )
 
 func TestProviderCaching(t *testing.T) {

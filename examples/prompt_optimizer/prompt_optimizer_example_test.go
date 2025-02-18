@@ -8,9 +8,9 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/teilomillet/gollm"
-	"github.com/teilomillet/gollm/optimizer"
-	"github.com/teilomillet/gollm/utils"
+	gollm "github.com/yockii/gollm_cn"
+	"github.com/yockii/gollm_cn/optimizer"
+	"github.com/yockii/gollm_cn/utils"
 )
 
 func TestPromptOptimizer(t *testing.T) {

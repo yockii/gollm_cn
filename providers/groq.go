@@ -4,15 +4,17 @@ package providers
 import (
 	"encoding/json"
 	"fmt"
+	"net/url"
 
-	"github.com/teilomillet/gollm/config"
-	"github.com/teilomillet/gollm/utils"
+	"github.com/yockii/gollm_cn/config"
+	"github.com/yockii/gollm_cn/utils"
 )
 
 // GroqProvider implements the Provider interface for Groq's API.
 // It supports Groq's optimized language models and provides access to their
 // high-performance inference capabilities.
 type GroqProvider struct {
+	endpoint     string
 	apiKey       string                 // API key for authentication
 	model        string                 // Model identifier (e.g., "llama2-70b", "mixtral-8x7b")
 	extraHeaders map[string]string      // Additional HTTP headers
@@ -30,11 +32,15 @@ type GroqProvider struct {
 //
 // Returns:
 //   - A configured Groq Provider instance
-func NewGroqProvider(apiKey, model string, extraHeaders map[string]string) Provider {
+func NewGroqProvider(endpoint, apiKey, model string, extraHeaders map[string]string) Provider {
 	if extraHeaders == nil {
 		extraHeaders = make(map[string]string)
 	}
+	if endpoint == "" {
+		endpoint = "https://api.groq.com/openai/v1"
+	}
 	return &GroqProvider{
+		endpoint:     endpoint,
 		apiKey:       apiKey,
 		model:        model,
 		extraHeaders: extraHeaders,
@@ -49,6 +55,10 @@ func (p *GroqProvider) SetLogger(logger utils.Logger) {
 	p.logger = logger
 }
 
+func (p *GroqProvider) SetEndpoint(endpoint string) {
+	p.endpoint = endpoint
+}
+
 // Name returns the identifier for this provider ("groq").
 func (p *GroqProvider) Name() string {
 	return "groq"
@@ -57,6 +67,12 @@ func (p *GroqProvider) Name() string {
 // Endpoint returns the Groq API endpoint URL.
 // This is "https://api.groq.com/openai/v1/chat/completions".
 func (p *GroqProvider) Endpoint() string {
+	u, err := url.JoinPath(p.endpoint, "/chat/completions")
+	if err != nil {
+		p.logger.Error("Error joining URL", "error", err)
+	} else {
+		return u
+	}
 	return "https://api.groq.com/openai/v1/chat/completions"
 }
 

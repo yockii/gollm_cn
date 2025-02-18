@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/teilomillet/gollm"
+	gollm "github.com/yockii/gollm_cn"
 )
 
 func main() {
@@ -33,16 +33,13 @@ func main() {
 	fmt.Printf("Response with initial endpoint: %s\n", response)
 
 	// Change the Ollama endpoint
-	err = llm.SetOllamaEndpoint("http://localhost:11435") // Change to a different port for demonstration
+	llm.SetEndpoint("http://localhost:11435") // Change to a different port for demonstration
+
+	// Try to generate a response with the new endpoint
+	response, err = llm.Generate(ctx, prompt)
 	if err != nil {
-		log.Printf("Failed to set new Ollama endpoint: %v", err)
+		log.Printf("Failed to generate response with new endpoint: %v", err)
 	} else {
-		// Try to generate a response with the new endpoint
-		response, err = llm.Generate(ctx, prompt)
-		if err != nil {
-			log.Printf("Failed to generate response with new endpoint: %v", err)
-		} else {
-			fmt.Printf("Response with new endpoint: %s\n", response)
-		}
+		fmt.Printf("Response with new endpoint: %s\n", response)
 	}
 }

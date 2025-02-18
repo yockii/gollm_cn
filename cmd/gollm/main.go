@@ -9,31 +9,31 @@ import (
 	"strings"
 	"time"
 
-	"github.com/teilomillet/gollm"
-	"github.com/teilomillet/gollm/optimizer"
-	"github.com/teilomillet/gollm/presets"
-	"github.com/teilomillet/gollm/utils"
+	gollm "github.com/yockii/gollm_cn"
+	"github.com/yockii/gollm_cn/optimizer"
+	"github.com/yockii/gollm_cn/presets"
+	"github.com/yockii/gollm_cn/utils"
 )
 
 func main() {
 	// Existing flags
-	promptType := flag.String("type", "raw", "Prompt type (raw, qa, cot, summarize, optimize)")
-	verbose := flag.Bool("verbose", false, "Display verbose output including full prompt")
-	provider := flag.String("provider", "", "LLM provider (anthropic, openai, groq, mistral, ollama, cohere)")
-	model := flag.String("model", "", "LLM model")
-	temperature := flag.Float64("temperature", -1, "LLM temperature")
-	maxTokens := flag.Int("max-tokens", 0, "LLM max tokens")
-	timeout := flag.Duration("timeout", 0, "LLM timeout")
-	apiKey := flag.String("api-key", "", "API key for the specified provider")
-	maxRetries := flag.Int("max-retries", 3, "Maximum number of retries for API calls")
-	retryDelay := flag.Duration("retry-delay", time.Second*2, "Delay between retries")
-	debugLevel := flag.String("debug-level", "warn", "Debug level (debug, info, warn, error)")
-	outputFormat := flag.String("output-format", "", "Output format for structured responses (json)")
+	promptType := flag.String("type", "raw", "提示类型 (raw, qa, cot, summarize, optimize)")
+	verbose := flag.Bool("verbose", false, "显示详细输出，包括完整提示")
+	provider := flag.String("provider", "", "LLM 提供者 (anthropic, openai, groq, mistral, ollama, cohere)")
+	model := flag.String("model", "", "LLM 模型")
+	temperature := flag.Float64("temperature", -1, "LLM 温度")
+	maxTokens := flag.Int("max-tokens", 0, "LLM 最大 tokens")
+	timeout := flag.Duration("timeout", 0, "LLM 超时")
+	apiKey := flag.String("api-key", "", "指定提供者的 API 密钥")
+	maxRetries := flag.Int("max-retries", 3, "API 调用最大重试次数")
+	retryDelay := flag.Duration("retry-delay", time.Second*2, "重试之间的延迟")
+	debugLevel := flag.String("debug-level", "warn", "调试级别 (debug, info, warn, error)")
+	outputFormat := flag.String("output-format", "", "结构化响应的输出格式 (json)")
 
 	// New flags for prompt optimization
-	optimizeGoal := flag.String("optimize-goal", "Improve the prompt's clarity and effectiveness", "Optimization goal")
-	optimizeIterations := flag.Int("optimize-iterations", 5, "Number of optimization iterations")
-	optimizeMemory := flag.Int("optimize-memory", 2, "Number of previous iterations to remember")
+	optimizeGoal := flag.String("optimize-goal", "提高提示的清晰度和有效性", "优化目标")
+	optimizeIterations := flag.Int("optimize-iterations", 5, "优化迭代次数")
+	optimizeMemory := flag.Int("optimize-memory", 2, "记住的先前迭代次数")
 
 	flag.Parse()
 

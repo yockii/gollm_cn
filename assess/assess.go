@@ -11,9 +11,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/teilomillet/gollm"
-	"github.com/teilomillet/gollm/config"
-	"github.com/teilomillet/gollm/llm"
+	gollm "github.com/yockii/gollm_cn"
+	"github.com/yockii/gollm_cn/config"
+	"github.com/yockii/gollm_cn/llm"
 	"golang.org/x/time/rate"
 )
 

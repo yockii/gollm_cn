@@ -6,16 +6,18 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"net/url"
 	"strings"
 
-	"github.com/teilomillet/gollm/config"
-	"github.com/teilomillet/gollm/utils"
+	"github.com/yockii/gollm_cn/config"
+	"github.com/yockii/gollm_cn/utils"
 )
 
 // AnthropicProvider implements the Provider interface for Anthropic's Claude API.
 // It supports Claude models and provides access to Anthropic's language model capabilities,
 // including structured output and system prompts.
 type AnthropicProvider struct {
+	endpoint     string                 // Base URL for the API
 	apiKey       string                 // API key for authentication
 	model        string                 // Model identifier (e.g., "claude-3-opus", "claude-3-sonnet")
 	extraHeaders map[string]string      // Additional HTTP headers
@@ -33,8 +35,12 @@ type AnthropicProvider struct {
 //
 // Returns:
 //   - A configured Anthropic Provider instance
-func NewAnthropicProvider(apiKey, model string, extraHeaders map[string]string) Provider {
+func NewAnthropicProvider(endpoint, apiKey, model string, extraHeaders map[string]string) Provider {
+	if endpoint == "" {
+		endpoint = "https://api.anthropic.com"
+	}
 	provider := &AnthropicProvider{
+		endpoint:     endpoint,
 		apiKey:       apiKey,
 		model:        model,
 		extraHeaders: make(map[string]string),
@@ -59,6 +65,10 @@ func NewAnthropicProvider(apiKey, model string, extraHeaders map[string]string) 
 // This is used for debugging and monitoring API interactions.
 func (p *AnthropicProvider) SetLogger(logger utils.Logger) {
 	p.logger = logger
+}
+
+func (p *AnthropicProvider) SetEndpoint(endpoint string) {
+	p.endpoint = endpoint
 }
 
 // SetOption sets a specific option for the Anthropic provider.
@@ -90,6 +100,12 @@ func (p *AnthropicProvider) Name() string {
 // Endpoint returns the Anthropic API endpoint URL.
 // For API version 2024-02-15, this is "https://api.anthropic.com/v1/messages".
 func (p *AnthropicProvider) Endpoint() string {
+	u, err := url.JoinPath(p.endpoint, "/messages")
+	if err != nil {
+		p.logger.Error("Error joining URL", "error", err)
+	} else {
+		return u
+	}
 	return "https://api.anthropic.com/v1/messages"
 }
 
@@ -157,7 +173,7 @@ func (p *AnthropicProvider) PrepareRequest(prompt string, options map[string]int
 
 		// Add tool usage instructions to system prompt
 		if len(tools) > 1 {
-			toolUsagePrompt := "When multiple tools are needed to answer a question, you should identify all required tools upfront and use them all at once in your response, rather than using them sequentially. Do not wait for tool results before calling other tools."
+			toolUsagePrompt := "当需要多个工具来回答问题时，你应该预先确定所有需要的工具，并在你的回复中一次性使用它们，而不是按顺序使用。在调用其他工具之前，不要等待工具的结果"
 			if systemPrompt != "" {
 				systemPrompt = toolUsagePrompt + "\n\n" + systemPrompt
 			} else {
@@ -270,7 +286,7 @@ func (p *AnthropicProvider) PrepareRequestWithSchema(prompt string, options map[
 	}
 
 	// Create a system message that enforces the JSON schema
-	systemMsg := fmt.Sprintf("You must respond with a JSON object that strictly adheres to this schema:\n%s\nDo not include any explanatory text, only output valid JSON.", string(schemaJSON))
+	systemMsg := fmt.Sprintf("你必须返回一个严格遵守以下 schema 的 JSON 对象:\n%s\n不要包含任何解释性文本，只输出有效的 JSON", string(schemaJSON))
 
 	requestBody := map[string]interface{}{
 		"model":  p.model,

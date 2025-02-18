@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"unicode/utf8"
 
-	"github.com/teilomillet/gollm"
+	"github.com/yockii/gollm_cn"
 )
 
 // chainOfThoughtTemplate defines a structured prompt template for guiding
@@ -33,13 +33,13 @@ import (
 //	Chain of Thought:
 var chainOfThoughtTemplate = gollm.NewPromptTemplate(
 	"ChainOfThought",
-	"Perform a chain of thought reasoning",
-	"Perform a chain of thought reasoning for the following question:\n\n{{.Question}}\n\nPlease number each step (1., 2., etc.) in your response.",
+	"执行思维链推理(Chain of thought)",
+	"请针对以下问题进行思维链推理:\n\n{{.Question}}\n\nn请在你的回复中对每个步骤进行编号 (1., 2., 等等)。",
 	gollm.WithPromptOptions(
 		gollm.WithDirectives(
-			"Break down the problem into steps",
-			"Show your reasoning for each step",
-			"Number each step (1., 2., etc.)",
+			"将问题分解为多个步骤",
+			"展示每个步骤的推理过程",
+			"对每个步骤进行编号 (1., 2., 等等)",
 		),
 		gollm.WithOutput("Chain of Thought:"),
 	),
