@@ -4,6 +4,11 @@
   <img src="img/gopherrobot4s.jpg" alt="Gophers building a robot by Renee French">
 </div>
 
+主要改造点：
+- 提示词中文化
+- 所有provider增加endpoint，方便使用各种兼容接口或代理接口
+
+
 `gollm` is a Go package designed to help you build your own AI golems. Just as the mystical golem of legend was brought to life with sacred words, `gollm` empowers you to breathe life into your AI creations using the power of Large Language Models (LLMs). This package simplifies and streamlines interactions with various LLM providers, offering a unified, flexible, and powerful interface for AI engineers and developers to craft their own digital servants.
 
 <div align="center">
